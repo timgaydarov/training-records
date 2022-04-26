@@ -1,26 +1,45 @@
-import "./App.css";
 import { useState } from "react";
-
 import AddWorkouts from "./components/AddWorkouts";
-import Form from "./components/Form";
+import Workout from "./components/Workout";
 
 function App() {
-  const workoutData = [];
-  const [workouts, setWorkouts] = useState(workoutData);
+  const [workouts, setWorkouts] = useState([]);
 
-  const addWorkout = (w) => {
-    w.id = workouts.length + 1;
-    setWorkouts([...workouts, w]);
+  const addWorkout = (workout) => {
+    workout.id = workouts.length + 1;
+
+    setWorkouts(
+      [...workouts, workout].sort((a, b) => {
+        if (a.date < b.date) {
+          return 1;
+        }
+        if (a.date > b.date) {
+          return -1;
+        }
+        return 0;
+      })
+    );
+
+    const dateIndex = workouts.findIndex(({ date }) => workout.date === date);
+    const existedDate = workouts[dateIndex];
+    const newWorkout = {
+      ...existedDate,
+      distance: +existedDate.distance + +workout.distance,
+    };
+    const newWorkouts = [...workouts];
+    newWorkouts[dateIndex] = newWorkout;
+
+    setWorkouts(newWorkouts);
   };
 
   const deleteWorkout = (id) => {
-    setWorkouts(workouts.filter((w) => w.id !== id));
+    setWorkouts(workouts.filter((workout) => workout.id !== id));
   };
 
   return (
     <div className="wrapper">
       <AddWorkouts addWorkout={addWorkout} />
-      <Form workouts={workouts} deleteWorkout={deleteWorkout} />
+      <Workout workouts={workouts} deleteWorkout={deleteWorkout} />
     </div>
   );
 }
