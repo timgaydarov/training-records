@@ -14,11 +14,7 @@ export default function AddWorkouts(props) {
       "([0-9]{4}[.](0[1-9]|1[0-2])[.]([0-2]{1}[0-9]{1}|3[0-1]{1})|([0-2]{1}[0-9]{1}|3[0-1]{1})[.](0[1-9]|1[0-2])[.][0-9]{4})"
     );
     let dateOk = regex.test(date);
-    if (dateOk) {
-      return true;
-    } else {
-      return false;
-    }
+    return dateOk;
   }
 
   const handleSubmit = (event) => {
@@ -29,7 +25,9 @@ export default function AddWorkouts(props) {
     } else if (isValidDate(workout.date) === false) {
       return alert("Введите дату в правильном формате! Пример: 12.12.2012");
     } else {
-      return setWorkout(initialFormState), props.addWorkout(workout);
+      setWorkout(initialFormState);
+      props.addWorkout(workout);
+      return;
     }
   };
 
