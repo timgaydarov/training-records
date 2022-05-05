@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { isValidDate } from "../utils";
 
 export default function AddWorkouts(props) {
   const initialFormState = { id: null, date: "", distance: "" };
@@ -8,14 +9,6 @@ export default function AddWorkouts(props) {
     const { name, value } = event.currentTarget;
     setWorkout({ ...workout, [name]: value });
   };
-
-  function isValidDate(date) {
-    let regex = new RegExp(
-      "([0-9]{4}[.](0[1-9]|1[0-2])[.]([0-2]{1}[0-9]{1}|3[0-1]{1})|([0-2]{1}[0-9]{1}|3[0-1]{1})[.](0[1-9]|1[0-2])[.][0-9]{4})"
-    );
-    let dateOk = regex.test(date);
-    return dateOk;
-  }
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -27,6 +20,7 @@ export default function AddWorkouts(props) {
     } else {
       setWorkout(initialFormState);
       props.addWorkout(workout);
+      props.updateDistance(workout);
       return;
     }
   };
